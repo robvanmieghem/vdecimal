@@ -1,4 +1,4 @@
-name: Generate docs and deploy to Pages
+name: Publish docs
 
 on:
   # Runs on pushes targeting the default branch
@@ -43,7 +43,7 @@ jobs:
           path: vdecimal
 
       - name: Generate docs
-        run: v doc -f html -readme -o docs vdecimal/
+        run: v doc -f html -o docs vdecimal/
 
       - name: Setup Pages
         uses: actions/configure-pages@v3

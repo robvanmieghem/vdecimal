@@ -1,0 +1,31 @@
+name: Build and Test
+
+on: [push, pull_request]
+
+jobs:
+  buildtest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout V
+        uses: actions/checkout@v2
+        with:
+          repository: vlang/v
+
+      - name: Checkout vdecimal
+        uses: actions/checkout@v2
+        with:
+          path: vdecimal
+
+      - name: Build V
+        run: |
+          make
+          sudo ./v symlink
+
+      - name: Verify formatting
+        run: v fmt -verify vdecimal
+
+      - name: Run tests
+        run: v test vdecimal
+
+      - name: Compile lib
+        run: v -shared vdecimal

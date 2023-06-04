@@ -21,6 +21,43 @@ pub fn new(value i64, exp int) Decimal {
 	}
 }
 
+pub fn decimal_from_string(value string) !Decimal {
+	original_input := value
+	mut int_string := ''
+	mut exp := 0
+
+	// maybe replace this with strings.textscanner
+	mut p_index := -1
+	for i := 0; i < value.len; i++ {
+		if value[i] == `.` {
+			if p_index > -1 {
+				return error('can\'t convert ${value} to decimal: too many .s"')
+			}
+			p_index = i
+		}
+	}
+
+	if p_index == -1 {
+		// There is no decimal point, we can just parse the original string as
+		// an int
+		int_string = value
+	} else {
+		if p_index + 1 < value.len {
+			int_string = value.substr(0, p_index) + value.substr(p_index + 1, value.len)
+		} else {
+			int_string = value.substr(0, p_index)
+		}
+		exp -= value.substr(p_index + 1, value.len).len
+	}
+	d_value := big.integer_from_string(int_string) or {
+		return error('can\'t convert ${value} to decimal')
+	}
+	return Decimal{
+		value: d_value
+		exp: exp
+	}
+}
+
 // decimal_from_int converts an int to Decimal.
 pub fn decimal_from_int(a int) Decimal {
 	return new(a, 0)

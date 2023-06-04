@@ -75,6 +75,18 @@ fn (d Decimal) rescale(exp int) Decimal {
 	}
 }
 
+// str returns the string representation of the decimal
+// with the fixed point.
+//
+// Example:
+//
+//     d := new(-12345, -3)
+//     println(d)
+//
+// Output:
+//
+//     -12.345
+//
 pub fn (d Decimal) str() string {
 	if d.exp >= 0 {
 		return d.rescale(0).value.str()

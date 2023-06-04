@@ -1,7 +1,9 @@
 module vdecimal
 
+// Arbitrary-precision fixed-point decimal numbers
 import math.big
 import math
+import strings
 
 // Decimal represents a fixed-point decimal.
 // number = value * 10 ^ exp
@@ -71,4 +73,32 @@ fn (d Decimal) rescale(exp int) Decimal {
 		value: value
 		exp: exp
 	}
+}
+
+pub fn (d Decimal) str() string {
+	if d.exp >= 0 {
+		return d.rescale(0).value.str()
+	}
+	abs := d.value.abs()
+	str := abs.str()
+
+	mut int_part := ''
+	mut fractional_part := ''
+
+	if str.len > -d.exp {
+		int_part = str.substr(0, str.len + d.exp)
+		fractional_part = str.substr(str.len + d.exp, str.len)
+	} else {
+		int_part = '0'
+		num_zeroes := -d.exp - str.len
+		fractional_part = strings.repeat(`0`, num_zeroes) + str
+	}
+	mut number := int_part
+	if fractional_part.len > 0 {
+		number += '.' + fractional_part
+	}
+	if d.value.signum < 0 {
+		return '-' + number
+	}
+	return number
 }

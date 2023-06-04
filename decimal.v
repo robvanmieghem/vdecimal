@@ -21,6 +21,8 @@ pub fn new(value i64, exp int) Decimal {
 	}
 }
 
+// decimal_from_string returns a new Decimal from a string representation.
+// Trailing zeroes are not trimmed.
 pub fn decimal_from_string(value string) !Decimal {
 	original_input := value
 	mut int_string := ''

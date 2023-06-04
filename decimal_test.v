@@ -18,22 +18,22 @@ fn test_str() {
 	assert '-123.4' == d.str()
 }
 
-fn test_decimal_from_string() ? {
+fn test_decimal_from_string() ! {
 	mut s := '123.4'
-	mut d := decimal_from_string(s)?
+	mut d := decimal_from_string(s)!
 	assert d.str() == s
 }
 
-fn test_decimal_from_string_multiple_points() ? {
+fn test_decimal_from_string_multiple_points() ! {
 	// multiple `.`s should return an error
 	s := '123.4.5'
 	mut d := decimal_from_string(s) or { return }
 	return error('multiple `.`s should return an error')
 }
 
-fn test_decimal_from_string_illegal() ? {
+fn test_decimal_from_string_illegal() ! {
 	// should return an error
 	s := '1tyu23.45'
 	mut d := decimal_from_string(s) or { return }
-	return error('multiple `.`s should return an error')
+	return error('non decimal characters should return an error')
 }

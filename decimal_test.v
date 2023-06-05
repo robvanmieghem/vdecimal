@@ -85,3 +85,19 @@ fn test_sub() ! {
 		assert test_case[2] == result.str()
 	}
 }
+
+fn test_mul() ! {
+	test_cases := [
+		['2', '3', '6'],
+		['2454495034', '3451204593', '8470964534836491162'],
+		['24544.95034', '.3451204593', '8470.964534836491162'],
+		['.1', '.1', '0.01'],
+		['0', '1.001', '0'],
+	]
+	for test_case in test_cases {
+		d1 := decimal_from_string(test_case[0])!
+		d2 := decimal_from_string(test_case[1])!
+		result := d1 * d2
+		assert test_case[2] == result.str()
+	}
+}

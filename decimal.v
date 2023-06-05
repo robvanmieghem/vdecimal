@@ -192,3 +192,19 @@ pub fn (decimal Decimal) - (subtrahend Decimal) Decimal {
 		exp: rd.exp
 	}
 }
+
+pub fn (decimal Decimal) * (multiplicand Decimal) Decimal {
+	exp_i64 := i64(decimal.exp) + i64(multiplicand.exp)
+
+	// better to panic than to give incorrect results as
+	// Decimals are usually used for money
+	if exp_i64 > i64(math.max_i32) || exp_i64 < i64(math.min_i32) {
+		panic('exponent ${exp_i64} overflows an int32')
+	}
+
+	result_value := decimal.value * multiplicand.value
+	return Decimal{
+		value: result_value
+		exp: int(exp_i64)
+	}
+}

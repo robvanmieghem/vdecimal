@@ -101,3 +101,11 @@ fn test_mul() ! {
 		assert test_case[2] == result.str()
 	}
 }
+
+fn test_equalities() {
+	a := new(1234, 3)
+	b := new(1234, 3)
+	c := new(1234, 4)
+	assert a == b
+	assert a != c
+}

@@ -113,8 +113,21 @@ fn (d Decimal) rescale(exp int) Decimal {
 	}
 }
 
+// rescale_pair rescales two decimals to common exponential value (minimal exp of both decimals)
+fn rescale_pair(d1 Decimal, d2 Decimal) (Decimal, Decimal) {
+	if d1.exp == d2.exp {
+		return d1, d2
+	}
+	base_scale := math.min(d1.exp, d2.exp)
+	if base_scale != d1.exp {
+		return d1.rescale(base_scale), d2
+	}
+	return d1, d2.rescale(base_scale)
+}
+
 // str returns the string representation of the decimal
 // with the fixed point.
+// Trailing zeroes in the fractional part are trimmed.
 //
 // Example:
 //
@@ -143,6 +156,15 @@ pub fn (d Decimal) str() string {
 		num_zeroes := -d.exp - str.len
 		fractional_part = strings.repeat(`0`, num_zeroes) + str
 	}
+	// Trim trailing zeroes
+	mut i := fractional_part.len - 1
+	for ; i >= 0; i-- {
+		if fractional_part[i] != `0` {
+			break
+		}
+	}
+	fractional_part = fractional_part.substr(0, i + 1)
+
 	mut number := int_part
 	if fractional_part.len > 0 {
 		number += '.' + fractional_part
@@ -151,4 +173,13 @@ pub fn (d Decimal) str() string {
 		return '-' + number
 	}
 	return number
+}
+
+pub fn (decimal Decimal) + (addend Decimal) Decimal {
+	rd, rd2 := rescale_pair(decimal, addend)
+	result_value := rd.value + rd2.value
+	return Decimal{
+		value: result_value
+		exp: rd.exp
+	}
 }

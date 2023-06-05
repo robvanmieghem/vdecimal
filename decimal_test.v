@@ -20,6 +20,12 @@ fn test_str() {
 	// negative and fractional part
 	d = new(-1234, -1)
 	assert '-123.4' == d.str()
+	// trim trailing zeroes
+	d = new(12340, -2)
+	assert '123.4' == d.str()
+	// no fractional part if it has only zeroes
+	d = new(12340, -1)
+	assert '1234' == d.str()
 }
 
 fn test_decimal_from_string() ! {
@@ -40,4 +46,21 @@ fn test_decimal_from_string_illegal() ! {
 	s := '1tyu23.45'
 	mut d := decimal_from_string(s) or { return }
 	return error('non decimal characters should return an error')
+}
+
+fn test_add() ! {
+	test_cases := [
+		['2', '3', '5'],
+		['2454495034', '3451204593', '5905699627'],
+		['24544.95034', '.3451204593', '24545.2954604593'],
+		['.1', '.1', '0.2'],
+		['.1', '-.1', '0'],
+		['0', '1.001', '1.001'],
+	]
+	for test_case in test_cases {
+		d1 := decimal_from_string(test_case[0])!
+		d2 := decimal_from_string(test_case[1])!
+		sum := d1 + d2
+		assert test_case[2] == sum.str()
+	}
 }

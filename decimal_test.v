@@ -1,9 +1,13 @@
 module vdecimal
 
 fn test_int() {
+	// perfectly convertable
 	i := 123
-	d := decimal_from_int(i)
+	mut d := decimal_from_int(i)
 	assert i == d.int_part()
+	// int_part should truncate the fractional part
+	d = new(1239, -1)
+	assert d.int_part() == 123
 }
 
 fn test_str() {

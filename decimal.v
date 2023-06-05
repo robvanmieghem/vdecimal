@@ -213,3 +213,8 @@ pub fn (a Decimal) == (b Decimal) bool {
 	rd_a, rd_b := rescale_pair(a, b)
 	return rd_a.value == rd_b.value
 }
+
+pub fn (a Decimal) < (b Decimal) bool {
+	rd_a, rd_b := rescale_pair(a, b)
+	return rd_a.value < rd_b.value
+}

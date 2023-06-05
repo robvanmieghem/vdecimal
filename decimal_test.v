@@ -108,4 +108,6 @@ fn test_equalities() {
 	c := new(1234, 4)
 	assert a == b
 	assert a != c
+	assert a <= b
+	assert a < c
 }

@@ -64,3 +64,24 @@ fn test_add() ! {
 		assert test_case[2] == sum.str()
 	}
 }
+
+fn test_sub() ! {
+	test_cases := [
+		['2', '3', '-1'],
+		['12', '3', '9'],
+		['-2', '9', '-11'],
+		['2454495034', '3451204593', '-996709559'],
+		['24544.95034', '.3451204593', '24544.6052195407'],
+		['.1', '-.1', '0.2'],
+		['.1', '.1', '0'],
+		['0', '1.001', '-1.001'],
+		['1.001', '0', '1.001'],
+		['2.3', '.3', '2'],
+	]
+	for test_case in test_cases {
+		d1 := decimal_from_string(test_case[0])!
+		d2 := decimal_from_string(test_case[1])!
+		result := d1 - d2
+		assert test_case[2] == result.str()
+	}
+}

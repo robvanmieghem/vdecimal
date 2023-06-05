@@ -183,3 +183,12 @@ pub fn (decimal Decimal) + (addend Decimal) Decimal {
 		exp: rd.exp
 	}
 }
+
+pub fn (decimal Decimal) - (subtrahend Decimal) Decimal {
+	rd, rd2 := rescale_pair(decimal, subtrahend)
+	result_value := rd.value - rd2.value
+	return Decimal{
+		value: result_value
+		exp: rd.exp
+	}
+}
